@@ -38,10 +38,32 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
 class ServiceProviderSerializer(serializers.ModelSerializer):
     user = UserProfileSerializer(read_only=True)
+    username = serializers.CharField(source='user.username', read_only=True)
+    profile_picture = serializers.ImageField(source='user.profile_picture', read_only=True)
+    location = serializers.CharField(source='user.location', read_only=True)
+    availability_display = serializers.CharField(source='get_availability_status_display', read_only=True)
     
     class Meta:
         model = ServiceProvider
-        fields = ['id', 'user', 'bio', 'hourly_rate', 'is_available', 'rating', 'total_reviews', 'is_verified']
+        fields = ['id', 'user', 'username', 'profile_picture', 'location', 'bio', 
+                 'hourly_rate', 'is_available', 'availability_status', 'availability_display',
+                 'rating', 'total_reviews', 'is_verified', 'years_experience', 
+                 'completed_jobs', 'response_rate']
+
+class ServiceProviderDetailSerializer(serializers.ModelSerializer):
+    user = UserProfileSerializer(read_only=True)
+    username = serializers.CharField(source='user.username', read_only=True)
+    profile_picture = serializers.ImageField(source='user.profile_picture', read_only=True)
+    location = serializers.CharField(source='user.location', read_only=True)
+    availability_display = serializers.CharField(source='get_availability_status_display', read_only=True)
+    services_offered = serializers.StringRelatedField(many=True, read_only=True)
+    
+    class Meta:
+        model = ServiceProvider
+        fields = ['id', 'user', 'username', 'profile_picture', 'location', 'bio', 
+                 'hourly_rate', 'is_available', 'availability_status', 'availability_display',
+                 'rating', 'total_reviews', 'is_verified', 'years_experience', 
+                 'completed_jobs', 'response_rate', 'services_offered']
 
 class CustomerProfileSerializer(serializers.ModelSerializer):
     user = UserProfileSerializer(read_only=True)

@@ -22,6 +22,30 @@ class Service(models.Model):
     def __str__(self):
         return self.name
 
+class ServicePackage(models.Model):
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, related_name='packages')
+    name = models.CharField(max_length=200)
+    description = models.TextField()
+    duration_min = models.PositiveIntegerField(help_text="Duration in minutes")
+    duration_max = models.PositiveIntegerField(help_text="Max duration in minutes", null=True, blank=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    is_popular = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return f"{self.name} - {self.service.name}"
+    
+    @property
+    def duration_display(self):
+        if self.duration_max and self.duration_max != self.duration_min:
+            min_hours = self.duration_min // 60
+            max_hours = self.duration_max // 60
+            return f"{min_hours}-{max_hours} hours"
+        else:
+            hours = self.duration_min // 60
+            return f"{hours} hours" if hours > 0 else f"{self.duration_min} minutes"
+
 class Review(models.Model):
     customer = models.ForeignKey(User, on_delete=models.CASCADE)
     provider = models.ForeignKey('accounts.ServiceProvider', on_delete=models.CASCADE)

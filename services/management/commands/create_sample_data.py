@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 from django.contrib.auth import get_user_model
-from services.models import ServiceCategory, Service
+from services.models import ServiceCategory, Service, ServicePackage
 from accounts.models import ServiceProvider, CustomerProfile
 from decimal import Decimal
 
@@ -165,6 +165,63 @@ class Command(BaseCommand):
                 CustomerProfile.objects.create(user=user)
                 
                 self.stdout.write(f'Created customer: {user.username}')
+        
+        # Create service packages for House Cleaning
+        try:
+            house_cleaning = Service.objects.get(name='Deep House Cleaning')
+            
+            packages_data = [
+                {
+                    'name': 'Basic Cleaning',
+                    'description': 'Standard room cleaning, dusting, and mopping',
+                    'duration_min': 120,  # 2 hours
+                    'price': 12000,
+                    'is_popular': False
+                },
+                {
+                    'name': 'Deep Cleaning',
+                    'description': 'Comprehensive cleaning including appliances and hard-to-reach areas',
+                    'duration_min': 240,  # 4 hours
+                    'duration_max': 360,  # 6 hours
+                    'price': 25000,
+                    'is_popular': True
+                },
+                {
+                    'name': 'Move-in/Move-out',
+                    'description': 'Complete cleaning for moving situations',
+                    'duration_min': 480,  # 8 hours
+                    'price': 45000,
+                    'is_popular': False
+                }
+            ]
+            
+            for package_data in packages_data:
+                package, created = ServicePackage.objects.get_or_create(
+                    service=house_cleaning,
+                    name=package_data['name'],
+                    defaults={
+                        'description': package_data['description'],
+                        'duration_min': package_data['duration_min'],
+                        'duration_max': package_data.get('duration_max'),
+                        'price': Decimal(str(package_data['price'])),
+                        'is_popular': package_data['is_popular']
+                    }
+                )
+                if created:
+                    self.stdout.write(f'Created package: {package.name}')
+        
+        except Service.DoesNotExist:
+            self.stdout.write('House Cleaning service not found for creating packages')
+        
+        # Update provider data with additional fields
+        providers = ServiceProvider.objects.all()
+        for i, provider in enumerate(providers):
+            provider.total_reviews = 124 + (i * 50)
+            provider.years_experience = 3 + i
+            provider.completed_jobs = 50 + (i * 25)
+            provider.response_rate = Decimal('95.5') + i
+            provider.save()
+            self.stdout.write(f'Updated provider: {provider.user.username}')
         
         self.stdout.write(
             self.style.SUCCESS('Sample data created successfully!')
