@@ -12,6 +12,9 @@ class Migration(migrations.Migration):
         ('notifications', '0001_initial'),
         ('payments', '0001_initial'),
         ('services', '0002_servicepackage'),
+        ('admin', '__latest__'),
+        ('auth', '__latest__'),
+        ('contenttypes', '__latest__'),
     ]
 
     operations = [
@@ -20,88 +23,148 @@ class Migration(migrations.Migration):
             # Forward SQL - Update all foreign key constraints to CASCADE
             """
             -- Update accounts_customerprofile
-            ALTER TABLE accounts_customerprofile 
-            DROP CONSTRAINT IF EXISTS accounts_customerprofile_user_id_fkey;
-            ALTER TABLE accounts_customerprofile 
-            ADD CONSTRAINT accounts_customerprofile_user_id_fkey 
-            FOREIGN KEY (user_id) REFERENCES accounts_user(id) ON DELETE CASCADE;
+            DO $$ 
+            BEGIN
+                IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'accounts_customerprofile') THEN
+                    ALTER TABLE accounts_customerprofile 
+                    DROP CONSTRAINT IF EXISTS accounts_customerprofile_user_id_fkey;
+                    ALTER TABLE accounts_customerprofile 
+                    ADD CONSTRAINT accounts_customerprofile_user_id_fkey 
+                    FOREIGN KEY (user_id) REFERENCES accounts_user(id) ON DELETE CASCADE;
+                END IF;
+            END $$;
             
             -- Update accounts_otpverification
-            ALTER TABLE accounts_otpverification 
-            DROP CONSTRAINT IF EXISTS accounts_otpverification_user_id_fkey;
-            ALTER TABLE accounts_otpverification 
-            ADD CONSTRAINT accounts_otpverification_user_id_fkey 
-            FOREIGN KEY (user_id) REFERENCES accounts_user(id) ON DELETE CASCADE;
+            DO $$ 
+            BEGIN
+                IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'accounts_otpverification') THEN
+                    ALTER TABLE accounts_otpverification 
+                    DROP CONSTRAINT IF EXISTS accounts_otpverification_user_id_fkey;
+                    ALTER TABLE accounts_otpverification 
+                    ADD CONSTRAINT accounts_otpverification_user_id_fkey 
+                    FOREIGN KEY (user_id) REFERENCES accounts_user(id) ON DELETE CASCADE;
+                END IF;
+            END $$;
             
             -- Update accounts_serviceprovider
-            ALTER TABLE accounts_serviceprovider 
-            DROP CONSTRAINT IF EXISTS accounts_serviceprovider_user_id_fkey;
-            ALTER TABLE accounts_serviceprovider 
-            ADD CONSTRAINT accounts_serviceprovider_user_id_fkey 
-            FOREIGN KEY (user_id) REFERENCES accounts_user(id) ON DELETE CASCADE;
+            DO $$ 
+            BEGIN
+                IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'accounts_serviceprovider') THEN
+                    ALTER TABLE accounts_serviceprovider 
+                    DROP CONSTRAINT IF EXISTS accounts_serviceprovider_user_id_fkey;
+                    ALTER TABLE accounts_serviceprovider 
+                    ADD CONSTRAINT accounts_serviceprovider_user_id_fkey 
+                    FOREIGN KEY (user_id) REFERENCES accounts_user(id) ON DELETE CASCADE;
+                END IF;
+            END $$;
             
             -- Update bookings_booking
-            ALTER TABLE bookings_booking 
-            DROP CONSTRAINT IF EXISTS bookings_booking_customer_id_fkey;
-            ALTER TABLE bookings_booking 
-            ADD CONSTRAINT bookings_booking_customer_id_fkey 
-            FOREIGN KEY (customer_id) REFERENCES accounts_user(id) ON DELETE CASCADE;
+            DO $$ 
+            BEGIN
+                IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'bookings_booking') THEN
+                    ALTER TABLE bookings_booking 
+                    DROP CONSTRAINT IF EXISTS bookings_booking_customer_id_fkey;
+                    ALTER TABLE bookings_booking 
+                    ADD CONSTRAINT bookings_booking_customer_id_fkey 
+                    FOREIGN KEY (customer_id) REFERENCES accounts_user(id) ON DELETE CASCADE;
+                END IF;
+            END $$;
             
             -- Update chat_message
-            ALTER TABLE chat_message 
-            DROP CONSTRAINT IF EXISTS chat_message_sender_id_fkey;
-            ALTER TABLE chat_message 
-            ADD CONSTRAINT chat_message_sender_id_fkey 
-            FOREIGN KEY (sender_id) REFERENCES accounts_user(id) ON DELETE CASCADE;
+            DO $$ 
+            BEGIN
+                IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'chat_message') THEN
+                    ALTER TABLE chat_message 
+                    DROP CONSTRAINT IF EXISTS chat_message_sender_id_fkey;
+                    ALTER TABLE chat_message 
+                    ADD CONSTRAINT chat_message_sender_id_fkey 
+                    FOREIGN KEY (sender_id) REFERENCES accounts_user(id) ON DELETE CASCADE;
+                END IF;
+            END $$;
             
             -- Update chat_conversation_participants
-            ALTER TABLE chat_conversation_participants 
-            DROP CONSTRAINT IF EXISTS chat_conversation_participants_user_id_fkey;
-            ALTER TABLE chat_conversation_participants 
-            ADD CONSTRAINT chat_conversation_participants_user_id_fkey 
-            FOREIGN KEY (user_id) REFERENCES accounts_user(id) ON DELETE CASCADE;
+            DO $$ 
+            BEGIN
+                IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'chat_conversation_participants') THEN
+                    ALTER TABLE chat_conversation_participants 
+                    DROP CONSTRAINT IF EXISTS chat_conversation_participants_user_id_fkey;
+                    ALTER TABLE chat_conversation_participants 
+                    ADD CONSTRAINT chat_conversation_participants_user_id_fkey 
+                    FOREIGN KEY (user_id) REFERENCES accounts_user(id) ON DELETE CASCADE;
+                END IF;
+            END $$;
             
             -- Update django_admin_log
-            ALTER TABLE django_admin_log 
-            DROP CONSTRAINT IF EXISTS django_admin_log_user_id_fkey;
-            ALTER TABLE django_admin_log 
-            ADD CONSTRAINT django_admin_log_user_id_fkey 
-            FOREIGN KEY (user_id) REFERENCES accounts_user(id) ON DELETE CASCADE;
+            DO $$ 
+            BEGIN
+                IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'django_admin_log') THEN
+                    ALTER TABLE django_admin_log 
+                    DROP CONSTRAINT IF EXISTS django_admin_log_user_id_fkey;
+                    ALTER TABLE django_admin_log 
+                    ADD CONSTRAINT django_admin_log_user_id_fkey 
+                    FOREIGN KEY (user_id) REFERENCES accounts_user(id) ON DELETE CASCADE;
+                END IF;
+            END $$;
             
             -- Update notifications_notification
-            ALTER TABLE notifications_notification 
-            DROP CONSTRAINT IF EXISTS notifications_notification_user_id_fkey;
-            ALTER TABLE notifications_notification 
-            ADD CONSTRAINT notifications_notification_user_id_fkey 
-            FOREIGN KEY (user_id) REFERENCES accounts_user(id) ON DELETE CASCADE;
+            DO $$ 
+            BEGIN
+                IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'notifications_notification') THEN
+                    ALTER TABLE notifications_notification 
+                    DROP CONSTRAINT IF EXISTS notifications_notification_user_id_fkey;
+                    ALTER TABLE notifications_notification 
+                    ADD CONSTRAINT notifications_notification_user_id_fkey 
+                    FOREIGN KEY (user_id) REFERENCES accounts_user(id) ON DELETE CASCADE;
+                END IF;
+            END $$;
             
             -- Update payments_payment
-            ALTER TABLE payments_payment 
-            DROP CONSTRAINT IF EXISTS payments_payment_user_id_fkey;
-            ALTER TABLE payments_payment 
-            ADD CONSTRAINT payments_payment_user_id_fkey 
-            FOREIGN KEY (user_id) REFERENCES accounts_user(id) ON DELETE CASCADE;
+            DO $$ 
+            BEGIN
+                IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'payments_payment') THEN
+                    ALTER TABLE payments_payment 
+                    DROP CONSTRAINT IF EXISTS payments_payment_user_id_fkey;
+                    ALTER TABLE payments_payment 
+                    ADD CONSTRAINT payments_payment_user_id_fkey 
+                    FOREIGN KEY (user_id) REFERENCES accounts_user(id) ON DELETE CASCADE;
+                END IF;
+            END $$;
             
             -- Update payments_transaction
-            ALTER TABLE payments_transaction 
-            DROP CONSTRAINT IF EXISTS payments_transaction_user_id_fkey;
-            ALTER TABLE payments_transaction 
-            ADD CONSTRAINT payments_transaction_user_id_fkey 
-            FOREIGN KEY (user_id) REFERENCES accounts_user(id) ON DELETE CASCADE;
+            DO $$ 
+            BEGIN
+                IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'payments_transaction') THEN
+                    ALTER TABLE payments_transaction 
+                    DROP CONSTRAINT IF EXISTS payments_transaction_user_id_fkey;
+                    ALTER TABLE payments_transaction 
+                    ADD CONSTRAINT payments_transaction_user_id_fkey 
+                    FOREIGN KEY (user_id) REFERENCES accounts_user(id) ON DELETE CASCADE;
+                END IF;
+            END $$;
             
             -- Update payments_wallet
-            ALTER TABLE payments_wallet 
-            DROP CONSTRAINT IF EXISTS payments_wallet_user_id_fkey;
-            ALTER TABLE payments_wallet 
-            ADD CONSTRAINT payments_wallet_user_id_fkey 
-            FOREIGN KEY (user_id) REFERENCES accounts_user(id) ON DELETE CASCADE;
+            DO $$ 
+            BEGIN
+                IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'payments_wallet') THEN
+                    ALTER TABLE payments_wallet 
+                    DROP CONSTRAINT IF EXISTS payments_wallet_user_id_fkey;
+                    ALTER TABLE payments_wallet 
+                    ADD CONSTRAINT payments_wallet_user_id_fkey 
+                    FOREIGN KEY (user_id) REFERENCES accounts_user(id) ON DELETE CASCADE;
+                END IF;
+            END $$;
             
             -- Update services_review
-            ALTER TABLE services_review 
-            DROP CONSTRAINT IF EXISTS services_review_customer_id_fkey;
-            ALTER TABLE services_review 
-            ADD CONSTRAINT services_review_customer_id_fkey 
-            FOREIGN KEY (customer_id) REFERENCES accounts_user(id) ON DELETE CASCADE;
+            DO $$ 
+            BEGIN
+                IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'services_review') THEN
+                    ALTER TABLE services_review 
+                    DROP CONSTRAINT IF EXISTS services_review_customer_id_fkey;
+                    ALTER TABLE services_review 
+                    ADD CONSTRAINT services_review_customer_id_fkey 
+                    FOREIGN KEY (customer_id) REFERENCES accounts_user(id) ON DELETE CASCADE;
+                END IF;
+            END $$;
             """,
             
             # Reverse SQL - Restore original constraints (if needed)
