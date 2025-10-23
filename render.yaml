@@ -40,16 +40,14 @@ services:
       - key: CELERY_RESULT_BACKEND
         value: redis://redis:6379
 
+databases:
   # PostgreSQL Database
-  - type: pserv
-    name: akazi-db
-    env: postgresql
+  - name: akazi-db
     plan: free
     region: oregon
 
   # Redis for Celery
-  - type: redis
-    name: redis
+  - name: redis
     plan: free
     region: oregon
     ipAllowList: []
