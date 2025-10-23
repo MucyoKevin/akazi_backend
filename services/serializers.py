@@ -16,11 +16,12 @@ class ServicePackageSerializer(serializers.ModelSerializer):
 
 class ServiceSerializer(serializers.ModelSerializer):
     category = ServiceCategorySerializer(read_only=True)
+    category_id = serializers.IntegerField(write_only=True)
     packages = ServicePackageSerializer(many=True, read_only=True)
     
     class Meta:
         model = Service
-        fields = ['id', 'name', 'description', 'base_price', 'category', 'packages']
+        fields = ['id', 'name', 'description', 'base_price', 'category', 'category_id', 'packages']
 
 class ServiceDetailSerializer(serializers.ModelSerializer):
     category = ServiceCategorySerializer(read_only=True)

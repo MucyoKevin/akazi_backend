@@ -1,16 +1,16 @@
 from rest_framework import generics
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from .models import ServiceCategory, Service, ServicePackage
 from .serializers import ServiceCategorySerializer, ServiceSerializer, ServiceDetailSerializer, ServicePackageSerializer
 
-class ServiceCategoryListView(generics.ListAPIView):
+class ServiceCategoryListView(generics.ListCreateAPIView):
     queryset = ServiceCategory.objects.filter(is_active=True)
     serializer_class = ServiceCategorySerializer
-    permission_classes = [AllowAny]
+    permission_classes = [AllowAny]  # Allow anyone to view, but you might want to restrict creation
 
-class ServiceListView(generics.ListAPIView):
+class ServiceListView(generics.ListCreateAPIView):
     queryset = Service.objects.filter(is_active=True)
     serializer_class = ServiceSerializer
     permission_classes = [AllowAny]

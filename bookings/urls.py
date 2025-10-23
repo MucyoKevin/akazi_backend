@@ -5,4 +5,5 @@ urlpatterns = [
     path('', views.BookingListView.as_view(), name='booking_list'),
     path('create/', views.BookingCreateView.as_view(), name='booking_create'),
     path('<int:booking_id>/confirm/', views.confirm_booking, name='confirm_booking'),
+    path('<int:booking_id>/delete/', views.delete_booking, name='delete_booking'),
 ]
