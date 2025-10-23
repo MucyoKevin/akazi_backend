@@ -7,6 +7,11 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('accounts', '0003_serviceprovider_availability_status_and_more'),
+        ('chat', '0002_alter_conversation_participants'),
+        ('bookings', '0002_initial'),
+        ('notifications', '0001_initial'),
+        ('payments', '0001_initial'),
+        ('services', '0002_servicepackage'),
     ]
 
     operations = [
