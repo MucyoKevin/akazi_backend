@@ -1,0 +1,54 @@
+services:
+  # Web Service
+  - type: web
+    name: akazi-backend
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python manage.py migrate && python manage.py collectstatic --noinput && gunicorn akazi.wsgi:application
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: DEBUG
+        value: False
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DB_NAME
+        fromDatabase:
+          name: akazi-db
+          property: database
+      - key: DB_USER
+        fromDatabase:
+          name: akazi-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: akazi-db
+          property: password
+      - key: DB_HOST
+        fromDatabase:
+          name: akazi-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: akazi-db
+          property: port
+      - key: ALLOWED_HOSTS
+        value: akazi-backend.onrender.com
+      - key: CELERY_BROKER_URL
+        value: redis://redis:6379
+      - key: CELERY_RESULT_BACKEND
+        value: redis://redis:6379
+
+  # PostgreSQL Database
+  - type: pserv
+    name: akazi-db
+    env: postgresql
+    plan: free
+    region: oregon
+
+  # Redis for Celery
+  - type: redis
+    name: redis
+    plan: free
+    region: oregon
