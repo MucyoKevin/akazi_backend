@@ -52,3 +52,4 @@ services:
     name: redis
     plan: free
     region: oregon
+    ipAllowList: []
